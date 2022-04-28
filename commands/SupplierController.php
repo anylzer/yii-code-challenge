@@ -33,26 +33,19 @@ class SupplierController extends Controller
     public function actionIndex()
     {
         $tableName = Supplier::tableName();
+        $schema    = Supplier::getTableSchema()->columns;
 
-        $supplier = $this->getSupplier(9);
+        $supplier  = $this->getSupplier(999);
 
         foreach ($supplier as $sup) {
             $okCnt = Yii::$app->db->createCommand()->insert($tableName, $sup)->execute();
-            /*
-            $str = implode('\', \'', $sup);
-            $sql = "INSERT INTO `supplier` (`name`, `code`, `t_status`) VALUES ('{$str}');\n";
-            echo $sql;
-             */
         }
 
-        $rows = Yii::$app->db->createCommand('SELECT * FROM supplier')->queryAll();
+        $rows = Yii::$app->db->createCommand('SELECT * FROM `supplier` ORDER BY `id` DESC LIMIT 6')->queryAll();
         echo Table::widget([
-            'headers' => ['id', 'name', 'code', 't_status'],
+            'headers' => array_keys($schema),
             'rows'    => $rows,
         ]);
-
-        $okOne = Yii::$app->db->createCommand('SELECT * FROM supplier')->queryOne();
-        var_dump($okOne);exit();
 
         return ExitCode::OK;
     }
