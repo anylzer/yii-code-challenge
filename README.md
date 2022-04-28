@@ -70,7 +70,7 @@ php yii supplier
 - Yii won't create the database for you, this has to be done manually before you can access it.
 - Check and edit the other files in the `config/` directory to customize your application as required.
 
-### Running  acceptance tests
+### Running
 
 1. start server, default prot 8888
 
@@ -82,4 +82,86 @@ php yii serve --port=9999
 
 ~~~
 http://localhost:9999/
+~~~
+
+3. beauty router
+
+~~~php
+vim yii-code-challenge/config/web.php
+
+    'db' => $db,
+    'urlManager' => [
+        'enablePrettyUrl' => true,
+        'showScriptName' => false,
+        'rules' => [
+        ],
+    ],
+~~~
+
+4. create supplier model
+
+~~~
+ http://localhost:9999/gii/model
+~~~
+
+5. edit supplier view 
+
+~~~html
+// vim yii-code-challenge/views/layouts/main.php
+
+    ['label' => 'Supplier', 'url' => ['/site/supplier']],
+
+// vim yii-code-challenge/controllers/SiteController.php
+    /**
+     * Displays test page.
+     *
+     * @return string
+     */
+    public function actionSupplier()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Supplier::find(),
+        ]);
+        try {
+            $table = GridView::widget([
+                'dataProvider' => $dataProvider,
+
+                'columns'=>[
+                    'id',
+                    'name',
+                    'code',
+                    't_status',
+                ]
+            ]);
+        } catch(\Exception $e) {
+            echo "error:". $e->getMessage() ."\n";
+        }
+        return $this->render('supplier', ['table' => $table]);
+    }
+// touch views/site/supplier.php
+
+<?php
+
+/** @var yii\web\View $this */
+
+use yii\helpers\Html;
+
+$this->title = 'Supplier';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="site-about">
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= $table ?>
+    </p>
+
+    <code><?= __FILE__ ?></code>
+</div>
+~~~
+
+6. show supplier
+
+~~~
+ http://localhost:9999/site/supplier
 ~~~
