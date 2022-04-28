@@ -37,7 +37,7 @@ class DemoController extends Controller
      * @param string $message the message to be echoed.
      * @return int Exit code
      */
-    public function actionIndex($message = 'hello world')
+    public function actionIndex()
     {
         $this->stdout("Hello {$this->name}?\n", Console::BOLD);
 

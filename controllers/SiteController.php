@@ -9,6 +9,9 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Supplier;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 
 class SiteController extends Controller
 {
@@ -124,5 +127,32 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Displays test page.
+     *
+     * @return string
+     */
+    public function actionSupplier()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Supplier::find(),
+        ]);
+        try {
+            $table = GridView::widget([
+                'dataProvider' => $dataProvider,
+
+                'columns'=>[
+                    'id',
+                    'name',
+                    'code',
+                    't_status',
+                ]
+            ]);
+        } catch(\Exception $e) {
+            echo "error:". $e->getMessage() ."\n";
+        }
+        return $this->render('supplier', ['table' => $table]);
     }
 }
