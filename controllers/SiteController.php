@@ -151,7 +151,7 @@ class SiteController extends Controller
                 ]
             ]);
         } catch(\Exception $e) {
-            echo "error:". $e->getMessage() ."\n";
+            Yii::warning("somthing wrong:". $e->getMessage());
         }
         return $this->render('supplier', ['table' => $table]);
     }
