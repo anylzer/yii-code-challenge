@@ -60,6 +60,11 @@ CREATE TABLE `supplier` (
   UNIQUE KEY `uk_code` (`code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 ```
+import test data
+
+```
+php yii supplier
+```
 
 **NOTES:**
 - Yii won't create the database for you, this has to be done manually before you can access it.
