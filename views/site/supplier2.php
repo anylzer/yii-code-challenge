@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 
-$this->title = 'GridView Simple';
+$this->title = 'GridView Search';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
@@ -13,6 +13,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= $table ?>
     </p>
-
-    <code><?= __FILE__ ?></code>
 </div>

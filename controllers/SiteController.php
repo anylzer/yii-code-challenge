@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Supplier;
+use app\models\SupplierSearch;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
 
@@ -130,7 +131,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays test page.
+     * Displays supplier gridview simple page.
      *
      * @return string
      */
@@ -138,12 +139,15 @@ class SiteController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Supplier::find(),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
         try {
             $table = GridView::widget([
                 'dataProvider' => $dataProvider,
 
-                'columns'=>[
+                'columns' => [
                     'id',
                     'name',
                     'code',
@@ -154,5 +158,69 @@ class SiteController extends Controller
             Yii::warning("somthing wrong:". $e->getMessage());
         }
         return $this->render('supplier', ['table' => $table]);
+    }
+
+    /**
+     * Displays supplier gridview search page.
+     *
+     * @return string
+     */
+    public function actionSupplier2()
+    {
+		$searchModel  = new SupplierSearch;
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        try {
+            $table = GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'showFooter' => false,
+                'columns' => [
+                    /*
+                    [
+                        'class' => 'yii\grid\SerialColumn',
+                    ],
+                     */
+                    'id',
+                    'name',
+                    [
+                        'attribute' => 'code',
+                        //'headerOptions' => ['style' => 'text-align:center;'],
+                        //'enableSorting' => false,
+                        //'contentOptions' => ['style' => 'background-color:gray;visibility:hidden;']
+                    ],
+                    [
+                        'attribute' => 't_status',
+                        'label'     => 'Status',
+                        'value'     => ['app\models\SupplierUtil', 'getTStatusValue'],
+                        'contentOptions' => function($data) {
+                            if ($data->t_status == 'ok') {
+                                return ['style' => 'color:green'];
+                            }
+                            return ['style' => 'color:gray'];
+                        },
+                        'filter'   => SupplierSearch::$allStatus,
+                        'filterInputOptions' => [
+                            'class'  => 'form-control',
+                            'id'     => null,
+                            'prompt' => '全部',
+                        ],
+                        'footer'   => 'Footer',
+                    ],
+                    [
+                        'class'    => 'yii\grid\ActionColumn',
+                        'header'   => 'Action',
+                        'headerOptions' => ['style' => 'width:120px;color:red'],
+                        //'template' => '{view} {update} {delete}',
+                    ],
+                ],
+                'layout'      => "\n{summary}\n{items}\n{pager}",
+                'showOnEmpty' => true,
+                //'emptyCell'   => 'not set header',
+            ]);
+        } catch(\Exception $e) {
+            Yii::warning("somthing wrong:". $e->getMessage());
+        }
+        return $this->render('supplier2', ['table' => $table]);
     }
 }
