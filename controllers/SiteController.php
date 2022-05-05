@@ -13,6 +13,8 @@ use app\models\Supplier;
 use app\models\SupplierSearch;
 use yii\data\ActiveDataProvider;
 use yii\grid\GridView;
+use kartik\export\ExportMenu;
+use kartik\grid\GridView as KGridView;
 
 class SiteController extends Controller
 {
@@ -222,5 +224,45 @@ class SiteController extends Controller
             Yii::warning("somthing wrong:". $e->getMessage());
         }
         return $this->render('supplier2', ['table' => $table]);
+    }
+
+    /**
+     * Displays supplier gridview export page.
+     *
+     * @return string
+     */
+    public function actionSupplier3()
+    {
+        $searchModel  = new SupplierSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $gridColumns  = [
+            'id',
+            'name',
+            'code',
+            't_status',
+        ];
+
+        $menu = ExportMenu::widget([
+            'dataProvider' => $dataProvider,
+            'columns'      => $gridColumns,
+        ]);
+
+        $table = KGridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel'  => $searchModel,
+            'pjax'         => true,
+            'pager'        => [
+                'firstPageLabel' => "首页",
+                'prevPageLabel'  => '上一页',
+                'nextPageLabel'  => '下一页',
+                'lastPageLabel'  => '未页',
+            ],
+            'columns'     => $gridColumns,
+            'layout'      => "\n{summary}\n{items}\n{pager}",
+            'showOnEmpty' => true,
+        ]);
+
+        return $this->render('supplier3', ['menu' => $menu, 'table' => $table]);
     }
 }

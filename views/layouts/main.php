@@ -43,6 +43,7 @@ AppAsset::register($this);
 			['label' => 'Supplier', 'url' => ['/site/supplier'], 'items' => [
 				['label' => 'GridView Simple', 'url' => ['/site/supplier']],
 				['label' => 'GridView Search', 'url' => ['/site/supplier2']],
+				['label' => 'GridView Export', 'url' => ['/site/supplier3']],
 			]],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

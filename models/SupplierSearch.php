@@ -55,49 +55,49 @@ class SupplierSearch extends \yii\db\ActiveRecord
             't_status' => 'T Status',
         ];
     }
-	/*
-	 * return $dataProvider
-	 */
-	public function search($params)
-	{
-		$query = Supplier::find();
+    /*
+     * return $dataProvider
+     */
+    public function search($params)
+    {
+        $query = Supplier::find();
 
-		$dataProvider = new ActiveDataProvider([
-			'query' => $query,
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
             'pagination' => [
-                'pageSize' => 6,
+                'pageSize' => 10,
             ],
-		]);
+        ]);
 
-		if (!($this->load($params) && $this->validate())) {
-			return $dataProvider;
-		}
+        if (!($this->load($params) && $this->validate())) {
+            return $dataProvider;
+        }
 
-		$params = $params['SupplierSearch'];
-		if ($params['id']) {
-			$query->andFilterWhere([
-				'id' => $params['id'],
-			]);
-		}
-		if ($params['t_status']) {
-			$query->andFilterWhere([
-				//'id'       => $params['id'],
-				//'name'     => $params['name'],
-				//'code'     => $params['code'],
-				't_status' => $params['t_status'],
-			]);
-		}
-		if ($params['name']) {
-			$query->andFilterWhere([
-				'like', 'name', (string) $params['name'],
-			]);
-		}
-		if ($params['code']) {
-			$query->andFilterWhere([
-				'like', 'code', (string) $params['code'],
-			]);		
-		}
+        $params = $params['SupplierSearch'];
+        if ($params['id']) {
+            $query->andFilterWhere([
+                'id' => $params['id'],
+            ]);
+        }
+        if ($params['t_status']) {
+            $query->andFilterWhere([
+                //'id'       => $params['id'],
+                //'name'     => $params['name'],
+                //'code'     => $params['code'],
+                't_status' => $params['t_status'],
+            ]);
+        }
+        if ($params['name']) {
+            $query->andFilterWhere([
+                'like', 'name', (string) $params['name'],
+            ]);
+        }
+        if ($params['code']) {
+            $query->andFilterWhere([
+                'like', 'code', (string) $params['code'],
+            ]);
+        }
 
-		return $dataProvider;
-	}
+        return $dataProvider;
+    }
 }
